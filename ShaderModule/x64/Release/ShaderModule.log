@@ -1,0 +1,63 @@
+﻿  Source.cpp
+C:\Users\hisha\source\repos\ShaderModule\ShaderModule\Source.cpp(249,1): warning C4244: '+=': conversion from 'genType' to 'T', possible loss of data
+          with
+          [
+              genType=double
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\hisha\source\repos\ShaderModule\ShaderModule\Source.cpp(253,1): warning C4244: '-=': conversion from 'genType' to 'T', possible loss of data
+          with
+          [
+              genType=double
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\hisha\source\repos\ShaderModule\ShaderModule\Source.cpp(258,1): warning C4244: '+=': conversion from 'genType' to 'T', possible loss of data
+          with
+          [
+              genType=double
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\hisha\source\repos\ShaderModule\ShaderModule\Source.cpp(263,1): warning C4244: '-=': conversion from 'genType' to 'T', possible loss of data
+          with
+          [
+              genType=double
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\hisha\source\repos\ShaderModule\ShaderModule\Source.cpp(268,1): warning C4244: '+=': conversion from 'genType' to 'T', possible loss of data
+          with
+          [
+              genType=double
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\hisha\source\repos\ShaderModule\ShaderModule\Source.cpp(273,1): warning C4244: '-=': conversion from 'genType' to 'T', possible loss of data
+          with
+          [
+              genType=double
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\hisha\source\repos\ShaderModule\ShaderModule\Source.cpp(277,1): warning C4305: '-=': truncation from 'double' to 'float'
+C:\Users\hisha\source\repos\ShaderModule\ShaderModule\Source.cpp(280,1): warning C4305: '+=': truncation from 'double' to 'float'
+  Generating code
+  8 of 2766 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    12 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  ShaderModule.vcxproj -> C:\Users\hisha\source\repos\ShaderModule\x64\Release\ShaderModule.exe
