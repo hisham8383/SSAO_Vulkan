@@ -8,6 +8,8 @@ layout(location = 1) in vec3 Normal;
 layout(location = 2) in vec3 fragPos;
 
 layout(location = 0) out vec4 outColor;
+// output position
+// output normal
 
 void main() {
     outColor = vec4(fragColor, 1.0);
