@@ -1,6 +1,6 @@
 /*
 * Class wrapping access to the swap chain
-* 
+*
 * A swap chain is a collection of framebuffers used for rendering and presentation to the windowing system
 *
 * Copyright (C) 2016-2017 by Sascha Willems - www.saschawillems.de
@@ -50,14 +50,14 @@ typedef struct _SwapChainBuffers {
 
 class VulkanSwapChain
 {
-private: 
+private:
 	VkInstance instance;
 	VkDevice device;
 	VkPhysicalDevice physicalDevice;
 	VkSurfaceKHR surface;
 	// Function pointers
 	PFN_vkGetPhysicalDeviceSurfaceSupportKHR fpGetPhysicalDeviceSurfaceSupportKHR;
-	PFN_vkGetPhysicalDeviceSurfaceCapabilitiesKHR fpGetPhysicalDeviceSurfaceCapabilitiesKHR; 
+	PFN_vkGetPhysicalDeviceSurfaceCapabilitiesKHR fpGetPhysicalDeviceSurfaceCapabilitiesKHR;
 	PFN_vkGetPhysicalDeviceSurfaceFormatsKHR fpGetPhysicalDeviceSurfaceFormatsKHR;
 	PFN_vkGetPhysicalDeviceSurfacePresentModesKHR fpGetPhysicalDeviceSurfacePresentModesKHR;
 	PFN_vkCreateSwapchainKHR fpCreateSwapchainKHR;
@@ -69,20 +69,20 @@ public:
 	VkFormat colorFormat;
 	VkColorSpaceKHR colorSpace;
 	/** @brief Handle to the current swap chain, required for recreation */
-	VkSwapchainKHR swapChain = VK_NULL_HANDLE;	
+	VkSwapchainKHR swapChain = VK_NULL_HANDLE;
 	uint32_t imageCount;
 	std::vector<VkImage> images;
 	std::vector<SwapChainBuffer> buffers;
 	/** @brief Queue family index of the detected graphics and presenting device queue */
 	uint32_t queueNodeIndex = UINT32_MAX;
 
-	/** @brief Creates the platform specific surface abstraction of the native platform window used for presentation */	
+	/** @brief Creates the platform specific surface abstraction of the native platform window used for presentation */
 #if defined(VK_USE_PLATFORM_WIN32_KHR)
 	void initSurface(void* platformHandle, void* platformWindow)
 #elif defined(VK_USE_PLATFORM_ANDROID_KHR)
 	void initSurface(ANativeWindow* window)
 #elif defined(VK_USE_PLATFORM_WAYLAND_KHR)
-	void initSurface(wl_display *display, wl_surface *window)
+	void initSurface(wl_display* display, wl_surface* window)
 #elif defined(VK_USE_PLATFORM_XCB_KHR)
 	void initSurface(xcb_connection_t* connection, xcb_window_t window)
 #elif (defined(VK_USE_PLATFORM_IOS_MVK) || defined(VK_USE_PLATFORM_MACOS_MVK))
@@ -151,7 +151,7 @@ public:
 		// Find a queue with present support
 		// Will be used to present the swap chain images to the windowing system
 		std::vector<VkBool32> supportsPresent(queueCount);
-		for (uint32_t i = 0; i < queueCount; i++) 
+		for (uint32_t i = 0; i < queueCount; i++)
 		{
 			fpGetPhysicalDeviceSurfaceSupportKHR(physicalDevice, i, surface, &supportsPresent[i]);
 		}
@@ -160,16 +160,16 @@ public:
 		// families, try to find one that supports both
 		uint32_t graphicsQueueNodeIndex = UINT32_MAX;
 		uint32_t presentQueueNodeIndex = UINT32_MAX;
-		for (uint32_t i = 0; i < queueCount; i++) 
+		for (uint32_t i = 0; i < queueCount; i++)
 		{
-			if ((queueProps[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) != 0) 
+			if ((queueProps[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) != 0)
 			{
-				if (graphicsQueueNodeIndex == UINT32_MAX) 
+				if (graphicsQueueNodeIndex == UINT32_MAX)
 				{
 					graphicsQueueNodeIndex = i;
 				}
 
-				if (supportsPresent[i] == VK_TRUE) 
+				if (supportsPresent[i] == VK_TRUE)
 				{
 					graphicsQueueNodeIndex = i;
 					presentQueueNodeIndex = i;
@@ -177,13 +177,13 @@ public:
 				}
 			}
 		}
-		if (presentQueueNodeIndex == UINT32_MAX) 
-		{	
+		if (presentQueueNodeIndex == UINT32_MAX)
+		{
 			// If there's no queue that supports both present and graphics
 			// try to find a separate present queue
-			for (uint32_t i = 0; i < queueCount; ++i) 
+			for (uint32_t i = 0; i < queueCount; ++i)
 			{
-				if (supportsPresent[i] == VK_TRUE) 
+				if (supportsPresent[i] == VK_TRUE)
 				{
 					presentQueueNodeIndex = i;
 					break;
@@ -192,13 +192,13 @@ public:
 		}
 
 		// Exit if either a graphics or a presenting queue hasn't been found
-		if (graphicsQueueNodeIndex == UINT32_MAX || presentQueueNodeIndex == UINT32_MAX) 
+		if (graphicsQueueNodeIndex == UINT32_MAX || presentQueueNodeIndex == UINT32_MAX)
 		{
 			vks::tools::exitFatal("Could not find a graphics and/or presenting queue!", -1);
 		}
 
 		// todo : Add support for separate graphics and presenting queue
-		if (graphicsQueueNodeIndex != presentQueueNodeIndex) 
+		if (graphicsQueueNodeIndex != presentQueueNodeIndex)
 		{
 			vks::tools::exitFatal("Separate graphics and presenting queues are not supported yet!", -1);
 		}
@@ -249,7 +249,7 @@ public:
 
 	/**
 	* Set instance, physical and logical device to use for the swapchain and get all required function pointers
-	* 
+	*
 	* @param instance Vulkan instance to use
 	* @param physicalDevice Physical device used to query properties and formats relevant to the swapchain
 	* @param device Logical representation of the device to create the swapchain for
@@ -271,14 +271,14 @@ public:
 		GET_DEVICE_PROC_ADDR(device, QueuePresentKHR);
 	}
 
-	/** 
+	/**
 	* Create the swapchain and get its images with given width and height
-	* 
+	*
 	* @param width Pointer to the width of the swapchain (may be adjusted to fit the requirements of the swapchain)
 	* @param height Pointer to the height of the swapchain (may be adjusted to fit the requirements of the swapchain)
 	* @param vsync (Optional) Can be used to force vsync'd rendering (by using VK_PRESENT_MODE_FIFO_KHR as presentation mode)
 	*/
-	void create(uint32_t *width, uint32_t *height, bool vsync = false)
+	void create(uint32_t* width, uint32_t* height, bool vsync = false)
 	{
 		VkSwapchainKHR oldSwapchain = swapChain;
 
@@ -405,8 +405,8 @@ public:
 
 		// If an existing swap chain is re-created, destroy the old swap chain
 		// This also cleans up all the presentable images
-		if (oldSwapchain != VK_NULL_HANDLE) 
-		{ 
+		if (oldSwapchain != VK_NULL_HANDLE)
+		{
 			for (uint32_t i = 0; i < imageCount; i++)
 			{
 				vkDestroyImageView(device, buffers[i].view, nullptr);
@@ -449,7 +449,7 @@ public:
 		}
 	}
 
-	/** 
+	/**
 	* Acquires the next image in the swap chain
 	*
 	* @param presentCompleteSemaphore (Optional) Semaphore that is signaled when the image is ready for use
@@ -459,7 +459,7 @@ public:
 	*
 	* @return VkResult of the image acquisition
 	*/
-	VkResult acquireNextImage(VkSemaphore presentCompleteSemaphore, uint32_t *imageIndex)
+	VkResult acquireNextImage(VkSemaphore presentCompleteSemaphore, uint32_t* imageIndex)
 	{
 		// By setting timeout to UINT64_MAX we will always wait until the next image has been acquired or an actual error is thrown
 		// With that we don't have to handle VK_NOT_READY
@@ -517,11 +517,11 @@ public:
 #if defined(_DIRECT2DISPLAY)
 	/**
 	* Create direct to display surface
-	*/	
+	*/
 	void createDirect2DisplaySurface(uint32_t width, uint32_t height)
 	{
 		uint32_t displayPropertyCount;
-		
+
 		// Get display property
 		vkGetPhysicalDeviceDisplayPropertiesKHR(physicalDevice, &displayPropertyCount, NULL);
 		VkDisplayPropertiesKHR* pDisplayProperties = new VkDisplayPropertiesKHR[displayPropertyCount];
@@ -538,7 +538,7 @@ public:
 		VkDisplayModePropertiesKHR* pModeProperties;
 		bool foundMode = false;
 
-		for(uint32_t i = 0; i < displayPropertyCount;++i)
+		for (uint32_t i = 0; i < displayPropertyCount; ++i)
 		{
 			display = pDisplayProperties[i].display;
 			uint32_t modeCount;
@@ -561,10 +561,10 @@ public:
 			{
 				break;
 			}
-			delete [] pModeProperties;
+			delete[] pModeProperties;
 		}
 
-		if(!foundMode)
+		if (!foundMode)
 		{
 			vks::tools::exitFatal("Can't find a display and a display mode!", -1);
 			return;
@@ -573,35 +573,35 @@ public:
 		// Search for a best plane we can use
 		uint32_t bestPlaneIndex = UINT32_MAX;
 		VkDisplayKHR* pDisplays = NULL;
-		for(uint32_t i = 0; i < planePropertyCount; i++)
+		for (uint32_t i = 0; i < planePropertyCount; i++)
 		{
-			uint32_t planeIndex=i;
+			uint32_t planeIndex = i;
 			uint32_t displayCount;
 			vkGetDisplayPlaneSupportedDisplaysKHR(physicalDevice, planeIndex, &displayCount, NULL);
 			if (pDisplays)
 			{
-				delete [] pDisplays;
+				delete[] pDisplays;
 			}
 			pDisplays = new VkDisplayKHR[displayCount];
 			vkGetDisplayPlaneSupportedDisplaysKHR(physicalDevice, planeIndex, &displayCount, pDisplays);
 
 			// Find a display that matches the current plane
 			bestPlaneIndex = UINT32_MAX;
-			for(uint32_t j = 0; j < displayCount; j++)
+			for (uint32_t j = 0; j < displayCount; j++)
 			{
-				if(display == pDisplays[j])
+				if (display == pDisplays[j])
 				{
 					bestPlaneIndex = i;
 					break;
 				}
 			}
-			if(bestPlaneIndex != UINT32_MAX)
+			if (bestPlaneIndex != UINT32_MAX)
 			{
 				break;
 			}
 		}
 
-		if(bestPlaneIndex == UINT32_MAX)
+		if (bestPlaneIndex == UINT32_MAX)
 		{
 			vks::tools::exitFatal("Can't find a plane for displaying!", -1);
 			return;
@@ -642,7 +642,7 @@ public:
 		surfaceInfo.imageExtent.height = height;
 
 		VkResult result = vkCreateDisplayPlaneSurfaceKHR(instance, &surfaceInfo, NULL, &surface);
-		if (result !=VK_SUCCESS) {
+		if (result != VK_SUCCESS) {
 			vks::tools::exitFatal("Failed to create surface!", result);
 		}
 

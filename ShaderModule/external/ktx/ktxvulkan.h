@@ -38,7 +38,7 @@
  * $Date$
  */
 
-#include <ktx.h>
+#include "ktx.h"
 #include <vulkan/vulkan.h>
 
 #if 0
